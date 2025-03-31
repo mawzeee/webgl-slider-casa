@@ -6,11 +6,11 @@ class DepthMapEffect {
         this.gl = this.canvas.getContext('webgl');
 
         this.imageSets = [
-            { original: 'img/bg1.png', depth: 'img/bg-map1.png', character: 'img/character1.png', graffiti: 'img/graffiti1.png' },
-            { original: 'img/bg2.png', depth: 'img/bg-map2.png', character: 'img/character2.png', graffiti: 'img/graffiti2.png' },
-            { original: 'img/bg3.png', depth: 'img/bg-map3.png', character: 'img/character3.png', graffiti: 'img/graffiti3.png' },
-            { original: 'img/bg4.png', depth: 'img/bg-map4.png', character: 'img/character4.png', graffiti: 'img/graffiti4.png' },
-            { original: 'img/bg5.png', depth: 'img/bg-map5.png', character: 'img/character5.png', graffiti: 'img/graffiti5.png' },
+            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da336f08670cc24b5744_bg1.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a151d20d360320bd6_bg-map1.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a89e94d5f060ba272_character1.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94beb0ce3c356aebe83_graffiti1.webp' },
+            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da343538ad9615a3e8e3_bg2.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94abaf5625c6ed9d59d_bg-map2.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b17bbe69f351bf5cb_character2.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b7b7928efc8a1ab02_graffiti2.webp' },
+            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da34bb5f1230758e3287_bg3.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94bff08eb308aa3d303_bg-map3.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94bc0f6499a0bea1ca2_character3.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b151d20d360320cd9_graffiti3.webp' },
+            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da33f92ab0e6f329759d_bg4.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a4916501c1247685c_bg-map5.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b5ed4549ca8f90ccd_character4.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a94faca94fd02dc76_graffiti4.webp' },
+            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da3325a2363cf420673d_bg5.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a151d20d360320b9f_bg-map4.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b0eda885a6e929f4f_character5.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b6b0bed1222337af2_graffiti5.webp' },
         ];
 
         this.currentIndex = 0;
