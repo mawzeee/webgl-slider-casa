@@ -1,0 +1,377 @@
+class DepthMapEffect {
+    constructor(container) {
+        this.container = document.querySelector(container);
+        this.canvas = document.createElement('canvas');
+        this.container.appendChild(this.canvas);
+        this.gl = this.canvas.getContext('webgl');
+
+        this.imageSets = [
+            { original: 'img/bg1.png', depth: 'img/bg-map1.png', character: 'img/character1.png', graffiti: 'img/graffiti1.png' },
+            { original: 'img/bg2.png', depth: 'img/bg-map2.png', character: 'img/character2.png', graffiti: 'img/graffiti2.png' },
+            { original: 'img/bg3.png', depth: 'img/bg-map3.png', character: 'img/character3.png', graffiti: 'img/graffiti3.png' },
+            { original: 'img/bg4.png', depth: 'img/bg-map4.png', character: 'img/character4.png', graffiti: 'img/graffiti4.png' },
+            { original: 'img/bg5.png', depth: 'img/bg-map5.png', character: 'img/character5.png', graffiti: 'img/graffiti5.png' },
+        ];
+
+        this.currentIndex = 0;
+        this.textures = [];
+        this.mouse = { x: 0, y: 0 };
+        this.mouseTarget = { x: 0, y: 0 };
+
+        this.characterLayer = document.querySelector('.character-layer');
+        this.characterImg = document.querySelector('.character-img');
+        this.graffitiLayer = document.querySelector('.graffiti-layer');
+        this.graffitiImg = document.querySelector('.graffiti-img');
+
+        this.params = {
+            depthMultiplier: 0.04,
+            smoothing: 0.05,
+            enableMouse: true,
+        };
+
+        this.init();
+    }
+
+    init() {
+        this.resizeCanvas();
+        window.addEventListener("resize", () => this.resizeCanvas());
+
+        this.loadImages(this.imageSets[this.currentIndex], (images) => {
+            this.setupWebGL(images);
+            this.setCharacter(this.currentIndex);
+            this.setGraffiti(this.currentIndex);
+            this.addMouseMovement();
+            this.render();
+        });
+
+        this.setupButtons();
+    }
+
+    resizeCanvas() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    setCharacter(index) {
+        const character = this.imageSets[index].character;
+    
+        const glitchIn = () => {
+            gsap.fromTo(this.characterImg, {
+                opacity: 0,
+                x: -20,
+                skewX: 15,
+                filter: 'contrast(200%) brightness(150%) hue-rotate(20deg)',
+            }, {
+                duration: 0.5,
+                opacity: 1,
+                x: 0,
+                skewX: 0,
+                filter: 'none',
+                ease: 'expo.out'
+            });
+        };
+    
+        const tl = gsap.timeline({
+            onComplete: () => {
+                this.characterImg.src = character;
+                glitchIn();
+            }
+        });
+    
+        // Simulated TV glitch effect — fast jitter, RGB-like distortion
+        tl.to(this.characterImg, {
+            duration: 0.08,
+            x: 10,
+            scaleX: 1.05,
+            opacity: 0.8,
+            filter: 'hue-rotate(60deg) contrast(300%) saturate(2)',
+            ease: 'none'
+        })
+        .to(this.characterImg, {
+            duration: 0.06,
+            x: -15,
+            scaleX: 0.95,
+            opacity: 0.5,
+            filter: 'hue-rotate(-40deg) contrast(400%) brightness(200%)',
+            ease: 'none'
+        })
+        .to(this.characterImg, {
+            duration: 0.1,
+            x: 5,
+            scaleX: 1,
+            opacity: 0.2,
+            filter: 'saturate(3) contrast(150%)',
+            ease: 'none'
+        })
+        .to(this.characterImg, {
+            duration: 0.15,
+            x: 0,
+            opacity: 0,
+            filter: 'none',
+            ease: 'power2.out'
+        });
+    }
+    
+    
+
+    setGraffiti(index) {
+    const graffiti = this.imageSets[index].graffiti;
+
+    const glitchIn = () => {
+        gsap.fromTo(this.graffitiImg, {
+            opacity: 0,
+            x: -20,
+            skewX: 15,
+            filter: 'contrast(200%) brightness(150%) hue-rotate(20deg)',
+        }, {
+            duration: 0.5,
+            opacity: 1,
+            x: 0,
+            skewX: 0,
+            filter: 'none',
+            ease: 'expo.out'
+        });
+    };
+
+    const tl = gsap.timeline({
+        onComplete: () => {
+            this.graffitiImg.src = graffiti;
+            glitchIn();
+        }
+    });
+
+    tl.to(this.graffitiImg, {
+        duration: 0.08,
+        x: 10,
+        scaleX: 1.05,
+        opacity: 0.8,
+        filter: 'hue-rotate(60deg) contrast(300%) saturate(2)',
+        ease: 'none'
+    })
+    .to(this.graffitiImg, {
+        duration: 0.06,
+        x: -15,
+        scaleX: 0.95,
+        opacity: 0.5,
+        filter: 'hue-rotate(-40deg) contrast(400%) brightness(200%)',
+        ease: 'none'
+    })
+    .to(this.graffitiImg, {
+        duration: 0.1,
+        x: 5,
+        scaleX: 1,
+        opacity: 0.2,
+        filter: 'saturate(3) contrast(150%)',
+        ease: 'none'
+    })
+    .to(this.graffitiImg, {
+        duration: 0.15,
+        x: 0,
+        opacity: 0,
+        filter: 'none',
+        ease: 'power2.out'
+    });
+}
+
+
+    setupButtons() {
+        const buttons = document.querySelectorAll('.slider-controls button');
+        const sliderActive = document.querySelector('.slider-active');
+
+        const updateSliderActivePosition = (button) => {
+            const buttonLeft = button.offsetLeft;
+            const buttonTop = button.offsetTop;
+
+            gsap.to(sliderActive, {
+                duration: 0.5,
+                x: buttonLeft,
+                y: buttonTop,
+                ease: "power2.out"
+            });
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        };
+
+        updateSliderActivePosition(buttons[0]);
+
+        buttons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = parseInt(button.getAttribute('data-index'), 10);
+
+                if (index !== this.currentIndex) {
+                    this.currentIndex = index;
+
+                    this.loadImages(this.imageSets[this.currentIndex], (images) => {
+                        this.setupWebGL(images);
+                        this.setCharacter(index);
+                        this.setGraffiti(index);
+                    });
+                }
+
+                updateSliderActivePosition(button);
+            });
+        });
+    }
+
+    loadImages(imageSet, callback) {
+        let images = [];
+        let urls = [imageSet.original, imageSet.depth];
+        let loaded = 0;
+
+        urls.forEach((url, index) => {
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = url;
+            img.onload = () => {
+                images[index] = img;
+                loaded++;
+                if (loaded === urls.length) {
+                    callback(images);
+                }
+            };
+            img.onerror = () => {
+                console.error(`Erreur de chargement de l'image : ${url}`);
+            };
+        });
+    }
+
+    setupWebGL(images) {
+        const gl = this.gl;
+
+        if (!this.program) {
+            this.program = gl.createProgram();
+            const vertexShader = this.createShader(gl, gl.VERTEX_SHADER, `
+                attribute vec2 a_position;
+                varying vec2 v_uv;
+                void main() {
+                    v_uv = (a_position + 1.0) / 2.0;
+                    gl_Position = vec4(a_position, 0, 1);
+                }
+            `);
+            const fragmentShader = this.createShader(gl, gl.FRAGMENT_SHADER, `
+                precision mediump float;
+                uniform sampler2D u_imageOriginal;
+                uniform sampler2D u_imageDepth;
+                uniform vec2 u_mouse;
+                uniform float u_depthMultiplier;
+                varying vec2 v_uv;
+
+                void main() {
+                    vec2 uv = vec2(v_uv.x, 1.0 - v_uv.y);
+                    vec4 depth = texture2D(u_imageDepth, uv);
+                    vec2 offset = (depth.r - 0.5) * u_mouse * u_depthMultiplier;
+                    vec4 color = texture2D(u_imageOriginal, uv + offset);
+                    gl_FragColor = color;
+                }
+            `);
+
+            gl.attachShader(this.program, vertexShader);
+            gl.attachShader(this.program, fragmentShader);
+            gl.linkProgram(this.program);
+            gl.useProgram(this.program);
+
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+                -1, -1, 1, -1, -1, 1, 1, 1
+            ]), gl.STATIC_DRAW);
+
+            const positionLocation = gl.getAttribLocation(this.program, "a_position");
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            this.uMouse = gl.getUniformLocation(this.program, "u_mouse");
+            this.uDepthMultiplier = gl.getUniformLocation(this.program, "u_depthMultiplier");
+        }
+
+        this.textures = images.map((image) => {
+            const texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            return texture;
+        });
+
+        this.bindTextures();
+    }
+
+    createShader(gl, type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            console.error(gl.getShaderInfoLog(shader));
+            gl.deleteShader(shader);
+            return null;
+        }
+        return shader;
+    }
+
+    bindTextures() {
+        const gl = this.gl;
+        const uImageOriginal = gl.getUniformLocation(this.program, "u_imageOriginal");
+        const uImageDepth = gl.getUniformLocation(this.program, "u_imageDepth");
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
+        gl.uniform1i(uImageOriginal, 0);
+
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, this.textures[1]);
+        gl.uniform1i(uImageDepth, 1);
+    }
+
+    addMouseMovement() {
+        window.addEventListener("mousemove", (e) => {
+            if (this.params.enableMouse) {
+                this.mouseTarget.x = ((e.clientX / window.innerWidth) * 2 - 1);
+                this.mouseTarget.y = ((e.clientY / window.innerHeight) * 2 - 1);
+            }
+        });
+    }
+
+    render() {
+        const gl = this.gl;
+
+        this.mouse.x += (this.mouseTarget.x - this.mouse.x) * this.params.smoothing;
+        this.mouse.y += (this.mouseTarget.y - this.mouse.y) * this.params.smoothing;
+
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        gl.uniform2f(this.uMouse, this.mouse.x, this.mouse.y);
+        gl.uniform1f(this.uDepthMultiplier, this.params.depthMultiplier);
+
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(this.render.bind(this));
+    }
+}
+
+new DepthMapEffect('#depthMapContainer');
+
+// Texte dynamique
+const headingWrap = document.querySelector('.heading-wrap');
+const spans = document.querySelectorAll('.heading-wrap span');
+let currentIndex = 0;
+
+function updateText(index) {
+    if (index === currentIndex) return;
+
+    const offset = -index * 100;
+
+    gsap.to(headingWrap, {
+        y: `${offset}%`,
+        duration: 0.5,
+        ease: "power1.out"
+    });
+
+    currentIndex = index;
+}
+
+const buttons = document.querySelectorAll('.slider-controls button');
+buttons.forEach((button, index) => {
+    button.addEventListener('click', () => updateText(index));
+});
