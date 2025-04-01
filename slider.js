@@ -362,7 +362,7 @@ buttons.forEach((button, index) => {
 
 const scrambleHeading = document.getElementById('scramble-heading');
 const titles = ["Otango River", "Pokawa Mountain", "Volco Ring", "Crimson Dunes", "Sunsillo Beach"];
-const chars = "!<>-_\\/[]{}—=+*^?#________";
+const chars = "ABCDEFGHIJKLMNOP#$%#$%$#@";
 
 function scrambleText(newText) {
     let oldText = scrambleHeading.textContent;
@@ -374,7 +374,7 @@ function scrambleText(newText) {
         const from = oldText[i] || "";
         const to = newText[i] || "";
         const start = Math.floor(Math.random() * 20);
-        const end = start + Math.floor(Math.random() * 20);
+        const end = start + Math.floor(Math.random() * 40);
         queue.push({ from, to, start, end, char: "" });
     }
 
