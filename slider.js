@@ -395,13 +395,13 @@ function scrambleText(newText) {
                     char = chars[Math.floor(Math.random() * chars.length)];
                     queue[i].char = char;
                 }
-                output += `<span style="opacity:0.6">${char}</span>`;
+                output += queue[i].char;
             } else {
                 output += from;
             }
         }
 
-        scrambleHeading.innerHTML = output;
+        scrambleHeading.textContent = output;
 
         if (complete < queue.length) {
             frame++;
