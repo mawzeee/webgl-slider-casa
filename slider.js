@@ -365,35 +365,48 @@ const titles = ["Otango River", "Pokawa Mountain", "Volco Ring", "Crimson Dunes"
 const chars = "abcdefghijklmnopqrstuvwxyz";
 
 function scrambleText(newText) {
-    const totalDuration = 400; // milliseconds
+    const totalDuration = 400; // ms
     const fps = 60;
-    const totalFrames = Math.round((totalDuration / 1000) * fps); // ≈ 24 frames
+    const totalFrames = Math.round((totalDuration / 1000) * fps); // ~24 frames
 
-    let oldText = scrambleHeading.textContent;
-    let length = Math.max(oldText.length, newText.length);
+    const oldText = scrambleHeading.textContent;
+    const length = Math.max(oldText.length, newText.length);
     let frame = 0;
     let queue = [];
 
     for (let i = 0; i < length; i++) {
         const from = oldText[i] || "";
         const to = newText[i] || "";
-        const start = Math.floor(Math.random() * totalFrames * 0.6);
-        const end = start + Math.floor(Math.random() * (totalFrames * 0.4));
-        queue.push({ from, to, start, end, char: "" });
+
+        if (to === " ") {
+            // Lock spaces in place
+            queue.push({ from: " ", to: " ", start: 0, end: 0, char: " " });
+        } else {
+            const start = Math.floor(Math.random() * totalFrames * 0.6);
+            const end = start + Math.floor(Math.random() * (totalFrames * 0.4));
+            queue.push({ from, to, start, end, char: "" });
+        }
     }
 
     function update() {
         let output = "";
         let complete = 0;
+
         for (let i = 0; i < queue.length; i++) {
-            let { from, to, start, end, char } = queue[i];
+            const { from, to, start, end, char } = queue[i];
+
+            if (to === " ") {
+                output += " ";
+                complete++;
+                continue;
+            }
+
             if (frame >= end) {
                 output += to;
                 complete++;
             } else if (frame >= start) {
                 if (!char || Math.random() < 0.28) {
-                    char = chars[Math.floor(Math.random() * chars.length)];
-                    queue[i].char = char;
+                    queue[i].char = chars[Math.floor(Math.random() * chars.length)];
                 }
                 output += queue[i].char;
             } else {
