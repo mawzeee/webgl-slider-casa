@@ -190,6 +190,7 @@ class DepthMapEffect {
                         this.setCharacter(index);
                         this.setGraffiti(index);
                     });
+                    scrambleText(titles[index]);
                 }
 
                 updateSliderActivePosition(button);
@@ -357,3 +358,54 @@ const buttons = document.querySelectorAll('.slider-controls button');
 buttons.forEach((button, index) => {
     button.addEventListener('click', () => updateText(index));
 });
+
+
+const scrambleHeading = document.getElementById('scramble-heading');
+const titles = ["CHARACTER ONE", "CHARACTER TWO", "CHARACTER THREE", "CHARACTER FOUR", "CHARACTER FIVE"];
+const chars = "!<>-_\\/[]{}—=+*^?#________";
+
+function scrambleText(newText) {
+    let oldText = scrambleHeading.textContent;
+    let length = Math.max(oldText.length, newText.length);
+    let frame = 0;
+    let queue = [];
+
+    for (let i = 0; i < length; i++) {
+        const from = oldText[i] || "";
+        const to = newText[i] || "";
+        const start = Math.floor(Math.random() * 20);
+        const end = start + Math.floor(Math.random() * 20);
+        queue.push({ from, to, start, end, char: "" });
+    }
+
+    function update() {
+        let output = "";
+        let complete = 0;
+        for (let i = 0; i < queue.length; i++) {
+            let { from, to, start, end, char } = queue[i];
+            if (frame >= end) {
+                output += to;
+                complete++;
+            } else if (frame >= start) {
+                if (!char || Math.random() < 0.28) {
+                    char = chars[Math.floor(Math.random() * chars.length)];
+                    queue[i].char = char;
+                }
+                output += `<span style="opacity:0.6">${char}</span>`;
+            } else {
+                output += from;
+            }
+        }
+
+        scrambleHeading.innerHTML = output;
+
+        if (complete < queue.length) {
+            requestAnimationFrame(update);
+            frame++;
+        }
+    }
+
+    update();
+}
+
+
