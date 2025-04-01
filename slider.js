@@ -362,9 +362,13 @@ buttons.forEach((button, index) => {
 
 const scrambleHeading = document.getElementById('scramble-heading');
 const titles = ["Otango River", "Pokawa Mountain", "Volco Ring", "Crimson Dunes", "Sunsillo Beach"];
-const chars = "ABCDEFGHIJKLMNOP#$%#$%$#@";
+const chars = "abcdefghijklmnop%$#@!&-";
 
 function scrambleText(newText) {
+    const totalDuration = 400; // milliseconds
+    const fps = 60;
+    const totalFrames = Math.round((totalDuration / 1000) * fps); // ≈ 24 frames
+
     let oldText = scrambleHeading.textContent;
     let length = Math.max(oldText.length, newText.length);
     let frame = 0;
@@ -373,8 +377,8 @@ function scrambleText(newText) {
     for (let i = 0; i < length; i++) {
         const from = oldText[i] || "";
         const to = newText[i] || "";
-        const start = Math.floor(Math.random() * 20);
-        const end = start + Math.floor(Math.random() * 20);
+        const start = Math.floor(Math.random() * totalFrames * 0.6);
+        const end = start + Math.floor(Math.random() * (totalFrames * 0.4));
         queue.push({ from, to, start, end, char: "" });
     }
 
@@ -400,12 +404,10 @@ function scrambleText(newText) {
         scrambleHeading.innerHTML = output;
 
         if (complete < queue.length) {
-            requestAnimationFrame(update);
             frame++;
+            requestAnimationFrame(update);
         }
     }
 
     update();
 }
-
-
