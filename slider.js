@@ -361,7 +361,7 @@ buttons.forEach((button, index) => {
 
 
 const scrambleHeading = document.getElementById('scramble-heading');
-const titles = ["CHARACTER ONE", "CHARACTER TWO", "CHARACTER THREE", "CHARACTER FOUR", "CHARACTER FIVE"];
+const titles = ["Otango River", "Pokawa Mountain", "Volco Ring", "Crimson Dunes", "Sunsillo Beach"];
 const chars = "!<>-_\\/[]{}—=+*^?#________";
 
 function scrambleText(newText) {
