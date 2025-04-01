@@ -85,7 +85,6 @@ class DepthMapEffect {
             x: 10,
             scaleX: 1.05,
             opacity: 0.8,
-            filter: 'hue-rotate(60deg) contrast(300%) saturate(2)',
             ease: 'none'
         })
         .to(this.characterImg, {
@@ -93,7 +92,6 @@ class DepthMapEffect {
             x: -15,
             scaleX: 0.95,
             opacity: 0.5,
-            filter: 'hue-rotate(-40deg) contrast(400%) brightness(200%)',
             ease: 'none'
         })
         .to(this.characterImg, {
@@ -101,16 +99,9 @@ class DepthMapEffect {
             x: 5,
             scaleX: 1,
             opacity: 0.2,
-            filter: 'saturate(3) contrast(150%)',
             ease: 'none'
         })
-        .to(this.characterImg, {
-            duration: 0.15,
-            x: 0,
-            opacity: 0,
-            filter: 'none',
-            ease: 'power2.out'
-        });
+         
     }
     
     
