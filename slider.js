@@ -374,7 +374,7 @@ function scrambleText(newText) {
         const from = oldText[i] || "";
         const to = newText[i] || "";
         const start = Math.floor(Math.random() * 20);
-        const end = start + Math.floor(Math.random() * 40);
+        const end = start + Math.floor(Math.random() * 20);
         queue.push({ from, to, start, end, char: "" });
     }
 
