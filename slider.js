@@ -362,7 +362,7 @@ buttons.forEach((button, index) => {
 
 const scrambleHeading = document.getElementById('scramble-heading');
 const titles = ["Otango River", "Pokawa Mountain", "Volco Ring", "Crimson Dunes", "Sunsillo Beach"];
-const chars = "abcdefghijklmnop%$#@!&-";
+const chars = "abcdefghijklmnopqrstuvwxyz";
 
 function scrambleText(newText) {
     const totalDuration = 400; // milliseconds
