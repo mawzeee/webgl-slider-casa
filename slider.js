@@ -59,17 +59,15 @@ class DepthMapEffect {
         const glitchIn = () => {
             gsap.fromTo(this.characterImg, {
                 opacity: 0,
-                x: -30,
-                scaleX: 1.2,
-                scaleY: 0.8,
-                skewX: 25,
+                x: -20,
+                skewX: 15,
+                filter: 'contrast(200%) brightness(150%) hue-rotate(20deg)',
             }, {
                 duration: 0.5,
                 opacity: 1,
                 x: 0,
-                scaleX: 1,
-                scaleY: 1,
                 skewX: 0,
+                filter: 'none',
                 ease: 'expo.out'
             });
         };
@@ -81,100 +79,82 @@ class DepthMapEffect {
             }
         });
     
-        // Stronger jitter sequence
+        // Simulated TV glitch effect — fast jitter, RGB-like distortion
         tl.to(this.characterImg, {
+            duration: 0.08,
+            x: 10,
+            scaleX: 1.05,
+            opacity: 0.8,
+            ease: 'none'
+        })
+        .to(this.characterImg, {
             duration: 0.06,
-            x: 20,
-            skewX: 15,
-            scaleY: 0.95,
+            x: -15,
+            scaleX: 0.95,
+            opacity: 0.5,
             ease: 'none'
         })
         .to(this.characterImg, {
-            duration: 0.05,
-            x: -25,
-            skewX: -10,
-            scaleX: 1.1,
-            ease: 'none'
-        })
-        .to(this.characterImg, {
-            duration: 0.04,
-            x: 12,
-            skewX: 6,
-            scaleY: 0.9,
-            ease: 'none'
-        })
-        .to(this.characterImg, {
-            duration: 0.03,
-            x: 0,
-            skewX: 0,
+            duration: 0.1,
+            x: 5,
             scaleX: 1,
-            scaleY: 1,
+            opacity: 0.2,
             ease: 'none'
-        });
+        })
+         
     }
-    
     
     
 
     setGraffiti(index) {
-        const graffiti = this.imageSets[index].graffiti;
-    
-        const glitchIn = () => {
-            gsap.fromTo(this.graffitiImg, {
-                opacity: 0,
-                x: -30,
-                scaleX: 1.2,
-                scaleY: 0.8,
-                skewX: 25,
-            }, {
-                duration: 0.5,
-                opacity: 1,
-                x: 0,
-                scaleX: 1,
-                scaleY: 1,
-                skewX: 0,
-                ease: 'expo.out'
-            });
-        };
-    
-        const tl = gsap.timeline({
-            onComplete: () => {
-                this.graffitiImg.src = graffiti;
-                glitchIn();
-            }
-        });
-    
-        tl.to(this.graffitiImg, {
-            duration: 0.06,
-            x: 20,
+    const graffiti = this.imageSets[index].graffiti;
+
+    const glitchIn = () => {
+        gsap.fromTo(this.graffitiImg, {
+            opacity: 0,
+            x: -20,
             skewX: 15,
-            scaleY: 0.95,
-            ease: 'none'
-        })
-        .to(this.graffitiImg, {
-            duration: 0.05,
-            x: -25,
-            skewX: -10,
-            scaleX: 1.1,
-            ease: 'none'
-        })
-        .to(this.graffitiImg, {
-            duration: 0.04,
-            x: 12,
-            skewX: 6,
-            scaleY: 0.9,
-            ease: 'none'
-        })
-        .to(this.graffitiImg, {
-            duration: 0.03,
+            filter: 'contrast(200%) brightness(150%) hue-rotate(20deg)',
+        }, {
+            duration: 0.5,
+            opacity: 1,
             x: 0,
             skewX: 0,
-            scaleX: 1,
-            scaleY: 1,
-            ease: 'none'
+            filter: 'none',
+            ease: 'expo.out'
         });
-    }
+    };
+
+    const tl = gsap.timeline({
+        onComplete: () => {
+            this.graffitiImg.src = graffiti;
+            glitchIn();
+        }
+    });
+
+    tl.to(this.graffitiImg, {
+        duration: 0.08,
+        x: 10,
+        scaleX: 1.05,
+        opacity: 0.8,
+        ease: 'none'
+    })
+    .to(this.graffitiImg, {
+        duration: 0.06,
+        x: -15,
+        scaleX: 0.95,
+        opacity: 0.5,
+        ease: 'none'
+    })
+    .to(this.graffitiImg, {
+        duration: 0.1,
+        x: 5,
+        scaleX: 1,
+        opacity: 0.2,
+        ease: 'none'
+    })
     
+}
 
 
     setupButtons() {
