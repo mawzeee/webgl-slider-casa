@@ -423,4 +423,28 @@ function scrambleText(newText) {
     }
 
     update();
+
+    const backgroundLayer = document.querySelector('.background-layer');
+const backgroundImg = backgroundLayer.querySelector('img');
+
+// Grab original image URLs from the DepthMapEffect's imageSets
+const originalImages = [
+    'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da336f08670cc24b5744_bg1.webp',
+    'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da343538ad9615a3e8e3_bg2.webp',
+    'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da34bb5f1230758e3287_bg3.webp',
+    'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da33f92ab0e6f329759d_bg4.webp',
+    'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da3325a2363cf420673d_bg5.webp'
+];
+
+buttons.forEach((button, index) => {
+    button.addEventListener('click', () => {
+        // For desktop, everything else already handled
+        // For mobile, swap the background image
+        if (window.innerWidth < 900) {
+            backgroundImg.src = originalImages[index];
+        }
+    });
+});
+
+
 }
