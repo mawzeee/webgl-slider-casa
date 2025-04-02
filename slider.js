@@ -440,7 +440,7 @@ buttons.forEach((button, index) => {
     button.addEventListener('click', () => {
         // For desktop, everything else already handled
         // For mobile, swap the background image
-        if (window.innerWidth < 900) {
+        if (window.innerWidth < 1024) {
             backgroundImg.src = originalImages[index];
         }
     });
