@@ -447,4 +447,4 @@ buttons.forEach((button, index) => {
 });
 
 
-}
+};
