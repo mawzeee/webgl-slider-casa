@@ -9,8 +9,8 @@ class DepthMapEffect {
             { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da336f08670cc24b5744_bg1.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a151d20d360320bd6_bg-map1.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a89e94d5f060ba272_character1.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94beb0ce3c356aebe83_graffiti1.webp' },
             { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da343538ad9615a3e8e3_bg2.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94abaf5625c6ed9d59d_bg-map2.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b17bbe69f351bf5cb_character2.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b7b7928efc8a1ab02_graffiti2.webp' },
             { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da34bb5f1230758e3287_bg3.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94bff08eb308aa3d303_bg-map3.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94bc0f6499a0bea1ca2_character3.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b151d20d360320cd9_graffiti3.webp' },
-            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da33f92ab0e6f329759d_bg4.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a4916501c1247685c_bg-map5.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b5ed4549ca8f90ccd_character4.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a94faca94fd02dc76_graffiti4.webp' },
-            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da3325a2363cf420673d_bg5.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a151d20d360320b9f_bg-map4.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b0eda885a6e929f4f_character5.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b6b0bed1222337af2_graffiti5.webp' },
+            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da33f92ab0e6f329759d_bg4.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a4916501c1247685c_bg-map5.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b5ed4549ca8f90ccd_character4.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/67edb7ced0ea720e18c421bd_GRAFFITI44%201.avif' },
+            { original: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756da3325a2363cf420673d_bg5.webp', depth: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94a151d20d360320b9f_bg-map4.webp', character: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/6756d94b0eda885a6e929f4f_character5.webp', graffiti: 'https://cdn.prod.website-files.com/6740471331c3ef2ba0ada212/67eda8180b63cb2ac5e5267f_GRAFFITI-28xxo%20(1).avif' },
         ];
 
         this.currentIndex = 0;
@@ -156,33 +156,28 @@ class DepthMapEffect {
     
 }
 
+
     setupButtons() {
         const buttons = document.querySelectorAll('.slider-controls button');
         const sliderActive = document.querySelector('.slider-active');
 
-        // Fonction pour mettre à jour la position de l'indicateur actif
         const updateSliderActivePosition = (button) => {
             const buttonLeft = button.offsetLeft;
             const buttonTop = button.offsetTop;
 
             gsap.to(sliderActive, {
-                duration: 1.5,
+                duration: 0.5,
                 x: buttonLeft,
                 y: buttonTop,
                 ease: "power2.out"
             });
 
-            // Supprimer la classe 'active' des autres boutons
             buttons.forEach(btn => btn.classList.remove('active'));
-
-            // Ajouter la classe 'active' au bouton sélectionné
             button.classList.add('active');
         };
 
-        // Initialiser la position sur le premier bouton
         updateSliderActivePosition(buttons[0]);
 
-        // Ajout des événements de clic aux boutons
         buttons.forEach((button) => {
             button.addEventListener('click', () => {
                 const index = parseInt(button.getAttribute('data-index'), 10);
@@ -195,9 +190,9 @@ class DepthMapEffect {
                         this.setCharacter(index);
                         this.setGraffiti(index);
                     });
+                    scrambleText(titles[index]);
                 }
 
-                // Mettre à jour la position de l'indicateur actif
                 updateSliderActivePosition(button);
             });
         });
@@ -210,7 +205,7 @@ class DepthMapEffect {
 
         urls.forEach((url, index) => {
             const img = new Image();
-            img.crossOrigin = "anonymous"; // Ajout de crossOrigin
+            img.crossOrigin = "anonymous";
             img.src = url;
             img.onload = () => {
                 images[index] = img;
@@ -340,9 +335,93 @@ class DepthMapEffect {
 
 new DepthMapEffect('#depthMapContainer');
 
+// Texte dynamique
+const headingWrap = document.querySelector('.heading-wrap');
+const spans = document.querySelectorAll('.heading-wrap span');
+let currentIndex = 0;
 
-// Ajoute l'événement de clic aux boutons
+function updateText(index) {
+    if (index === currentIndex) return;
+
+    const offset = -index * 100;
+
+    gsap.to(headingWrap, {
+        y: `${offset}%`,
+        duration: 0.5,
+        ease: "power1.out"
+    });
+
+    currentIndex = index;
+}
+
 const buttons = document.querySelectorAll('.slider-controls button');
 buttons.forEach((button, index) => {
     button.addEventListener('click', () => updateText(index));
 });
+
+
+const scrambleHeading = document.getElementById('scramble-heading');
+const titles = ["Otango River", "Pokawa Mountain", "Volco Ring", "Crimson Dunes", "Sunsillo Beach"];
+const chars = "abcdefghijklmnopqrstuvwxyz";
+
+function scrambleText(newText) {
+    const totalDuration = 400; // ms
+    const fps = 60;
+    const totalFrames = Math.round((totalDuration / 1000) * fps); // ~24 frames
+
+    const oldText = scrambleHeading.textContent;
+    const length = Math.max(oldText.length, newText.length);
+    let frame = 0;
+    let queue = [];
+
+    for (let i = 0; i < length; i++) {
+        const from = oldText[i] || "";
+        const to = newText[i] || "";
+
+        if (to === " ") {
+            // Lock spaces in place
+            queue.push({ from: " ", to: " ", start: 0, end: 0, char: " " });
+        } else {
+            const start = Math.floor(Math.random() * totalFrames * 0.6);
+            const end = start + Math.floor(Math.random() * (totalFrames * 0.4));
+            queue.push({ from, to, start, end, char: "" });
+        }
+    }
+
+    function update() {
+        let output = "";
+        let complete = 0;
+
+        for (let i = 0; i < queue.length; i++) {
+            const { from, to, start, end, char } = queue[i];
+
+            if (to === " ") {
+                output += " ";
+                complete++;
+                continue;
+            }
+
+            if (frame >= end) {
+                output += to;
+                complete++;
+            } else if (frame >= start) {
+                if (!char || Math.random() < 0.28) {
+                    queue[i].char = chars[Math.floor(Math.random() * chars.length)];
+                }
+                output += queue[i].char;
+            } else {
+                output += from;
+            }
+        }
+
+        scrambleHeading.textContent = output;
+
+        if (complete < queue.length) {
+            frame++;
+            requestAnimationFrame(update);
+        }
+    }
+
+    update();
+
+}
